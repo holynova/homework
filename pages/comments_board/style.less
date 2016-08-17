@@ -21,13 +21,14 @@
 				ol{
 					padding-left:10px;
 					li{
-						padding:10px 2em;
+						position: relative;
+						padding:10px 2em 1em;
 						border-bottom: 1px solid #f60;
 						line-height:2em;
 						// height:2em;
 						background-color: #ccc;
-						a{
-							display: none;
+						span{
+							// display:inline-block;
 						}
 						span.time{
 							// border:1px solid green;
@@ -37,6 +38,16 @@
 							padding:5px;
 							margin-right:1em;
 						}
+						span.content{
+							// border-radius: 3px;
+							// background-color:#818CEB;
+							// color:white;
+							// padding:5px;
+							margin-right:6em;
+						}
+						a{
+							display: none;
+						}
 					}
 					li:hover{
 						background-color: #eee;
@@ -44,7 +55,9 @@
 							display:inline-block;
 							float:right;
 							color: red;
-							padding-right: 1em;
+							position:absolute;
+							right:1em;
+							// padding-right: 1em;
 						}
 					}
 				}

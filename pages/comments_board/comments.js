@@ -1,25 +1,31 @@
 window.onload = function (){
-	var btnAdd = document.getElementById('wrapper').lastElementChild;
+	// var btnAdd = document.getElementById('wrapper').lastElementChild;
+	var btnAdd = document.querySelector('#wrapper input#btn_add');
 	// var aAchor = document.querySelectorAll('#wrapper ol li a');
 	// var oCommentsList = document.querySelector('#wrapper ol');
+	var oOl = document.querySelector('#wrapper ol');
 	var oTextarea = document.querySelector('#wrapper textarea');
 	var btnUp = document.querySelector('#btn_up');
 	var btnDown = document.querySelector('#btn_down');
 	oTextarea.focus();
-	genRandomComments(3);
+	genRandomComments(5);
 	updateCommentsPage();
 
 	EventUtil.addHandler(btnUp,'click',sortComments);
 	EventUtil.addHandler(btnDown,'click',sortComments);
 	EventUtil.addHandler(btnAdd,'click',addNewComment);
-
+	//绑定删除按钮点击事件
+	EventUtil.addHandler(oOl,'click',commentListClick);
 
 };
-function sortComments () {
-	if(event.target.id == 'btn_up'){
+//对评论按时间排序处理函数
+function sortComments (event) {
+	event = event || window.event;
+	var target = event.target || event.srcElement;
+	if(target.id == 'btn_up'){
 		gComments = gComments.sort(compareCommentTime);
 	}
-	else if(event.target.id == 'btn_down'){
+	else if(target.id == 'btn_down'){
 		gComments = gComments.sort(compareCommentTime).reverse();
 
 	} 
@@ -38,11 +44,14 @@ function unitTest(){
 
 function getDateStr(date){
 	return date.getFullYear()+'-'+
-		   (date.getMonth()+1)+'-'+
-		   date.getDate()+' '+
-		   date.getHours()+':'+
-		   date.getMinutes()+':'+
-		   date.getSeconds();
+		   toTwoBits((date.getMonth()+1))+'-'+
+		   toTwoBits(date.getDate())+' '+
+		   toTwoBits(date.getHours())+':'+
+		   toTwoBits(date.getMinutes())+':'+
+		   toTwoBits(date.getSeconds());
+}
+function toTwoBits(num){
+	return Math.abs(num)<10? '0'+num:''+num;
 }
 
 //---------------------------------------------
@@ -130,8 +139,7 @@ function updateCommentsPage(){
 	}
 	oOl.innerHTML = htmlStr;
 
-	//绑定删除按钮点击事件
-	EventUtil.addHandler(oOl,'click',commentListClick);
+
 
 }
 
@@ -149,10 +157,11 @@ function strEscape(str){
 }
 
 //评论列表点击事件的委托处理程序,主要用来处理删除按钮
-function commentListClick () {
-
-	if(event.target.tagName == 'A'){
-		event.target.parentNode.remove();
+function commentListClick (event) {
+	event = event || window.event;
+	var target = event.target || event.srcElement;
+	if(target.tagName == 'A'){
+		target.parentNode.parentNode.removeChild(target.parentNode);
 		updateData();
 	}
 }
@@ -168,3 +177,30 @@ function updateData(){
 
 	}
 }
+
+
+//兼容IE的通用事件处理对象
+EventUtil ={
+	addHandler:function(element,type,handler){
+		if(element.addEventListener){
+			element.addEventListener(type,handler,false);
+		}
+		else if(element.attachEvent){
+			element.attachEvent('on'+type,handler);
+		}
+		else{
+			element['on'+type] = handler;
+		}
+	},
+	removeHandler:function(element,type,handler){
+		if(element.removeEventListener){
+			element.removeEventListener(type,handler,false);
+		}
+		else if(element.attachEvent){
+			element.detachEvent('on'+type,handler);
+		}
+		else{
+			element['on'+type] = null;
+		}
+	}
+};

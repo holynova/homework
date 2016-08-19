@@ -18,6 +18,6 @@ $(document).ready(function() {
 });
 function init()
 {
-	console.log("ready to work");	
+	// console.log("ready to work");	
 	$('li').hide();
 }

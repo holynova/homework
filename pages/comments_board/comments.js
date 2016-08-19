@@ -1,3 +1,4 @@
+// 'use strict'
 window.onload = function (){
 	// var btnAdd = document.getElementById('wrapper').lastElementChild;
 	var btnAdd = document.querySelector('#wrapper input#btn_add');
